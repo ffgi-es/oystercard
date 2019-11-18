@@ -1,5 +1,6 @@
 class Oystercard
   BALANCE_LIMIT = 90
+  MINIMUM_BALANCE = 1
   attr_reader :balance
 
   def initialize
@@ -20,6 +21,7 @@ class Oystercard
   end
 
   def touch_in
+    raise minimum_balance_error if @balance < MINIMUM_BALANCE
     @in_journey = true
   end
 
@@ -35,6 +37,11 @@ class Oystercard
 
   def balance_limit_error total
     message = "Over balance limit (#{total}/#{BALANCE_LIMIT})"
+    BalanceError.new(message)
+  end
+
+  def minimum_balance_error
+    message = "Minimum balance: #{MINIMUM_BALANCE}"
     BalanceError.new(message)
   end
 
